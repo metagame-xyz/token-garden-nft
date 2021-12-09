@@ -15,6 +15,7 @@ const {
     RINKEBY_INFURA_URL,
     GOERLI_INFURA_URL,
     PRIVATE_KEY,
+    MAINNET_INFURA_URL,
     ETHERSCAN_API_KEY,
     COINMARKETCAP_API_KEY,
 } = process.env;
@@ -49,6 +50,12 @@ export default {
         goerli: {
             url: GOERLI_INFURA_URL,
             accounts: [`0x${PRIVATE_KEY}`],
+        },
+        mainnet: {
+            url: MAINNET_INFURA_URL,
+            accounts: [`0x${PRIVATE_KEY}`],
+            // gasPrice: 'auto',
+            // gasMultiplier: 1.05,
         },
     },
     //   contractSizer: {
