@@ -1,7 +1,11 @@
 import hre, { ethers, network, run } from 'hardhat';
 import '@nomiclabs/hardhat-ethers';
 import { waitForEtherscan } from '../helpers/deployHelpers';
+import { BigNumber } from 'ethers';
+import { formatUnits, parseUnits } from 'ethers/lib/utils';
 const [file] = process.argv.slice(2);
+
+const maxGasPrice = '100';
 
 interface ContractInfo {
     contractName: string;
@@ -11,6 +15,20 @@ interface ContractInfo {
 const getContractInfo = async (file: string): Promise<ContractInfo> =>
     await import(`../NFTs/${file}.ts`);
 
+async function waitForGasPriceBelow(max: BigNumber): Promise<BigNumber> {
+    console.log('Waiting for gas price below', formatUnits(max, 'gwei'), 'gwei');
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+        const price = await ethers.provider.getGasPrice();
+        console.log(new Date().toLocaleString(), 'Gas Price:', formatUnits(price, 'gwei'), 'gwei');
+        if (price.lte(max)) {
+            console.log('Good enough!');
+            return price;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 30_000));
+    }
+}
+
 async function main() {
     const { contractName, contractArgs } = await getContractInfo(file);
 
@@ -18,6 +36,8 @@ async function main() {
     console.log('contract args:', contractArgs);
 
     await run('compile');
+
+    const gasPrice = await waitForGasPriceBelow(parseUnits(maxGasPrice, 'gwei'));
 
     const ERC721Factory = await ethers.getContractFactory(contractName);
     const contractInstance = await ERC721Factory.deploy(...contractArgs); // Instance of the contract

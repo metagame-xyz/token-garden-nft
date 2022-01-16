@@ -65,7 +65,7 @@ export default {
     //  },
     gasReporter: {
         currency: 'USD',
-        gasPrice: 100,
+        gasPrice: 130,
         coinmarketcap: COINMARKETCAP_API_KEY,
     },
     etherscan: {

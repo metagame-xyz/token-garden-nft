@@ -16,11 +16,12 @@ describe('tokenGarden contract', () => {
     const mintCost = 0.01;
     let ownerStartingBalance: number;
     const metadataFolderURL = contractArgs[2];
-    // change 144 free mints to 2
-    // assert(contractArgs[3] === 144, 'freeMints should be 144');
-    // assert(contractArgs[4] === 1, 'mintsPerAddress should be 1');
 
-    // change 144 free mints to 2 for easier testing
+    assert(contractArgs[3] === 0, 'freeMints should be 0');
+    assert(contractArgs[4] === 1, 'mintsPerAddress should be 1');
+    assert(contractArgs[6] === false, 'mintActive should be false');
+
+    // change free mints to 2 for easier testing
     contractArgs[3] = 2;
 
     // const provider = ethers.getDefaultProvider(undefined, providerConfig[1]);
